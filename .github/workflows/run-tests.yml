@@ -1,0 +1,50 @@
+name: CI -Build, Test Coverage
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+# necesitamos escribir reportes y otraas cosas
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build-test-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup JDK 21 # importante la versión correcta
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 21
+        cache: maven
+
+    - name: Build & Test (with coverage)
+      run: mvn -B -U clean verify
+
+    - name: Upload Jacoco report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: jacoco-report
+        path: |
+          **/target/site/jacoco/**
+          **/target/site/jacoco-aggregate/**
+        if-no-files-found: ignore
+
+    - name: Publish JUnit test results
+      if: always()
+      uses: mikepenz/action-junit-report@v4
+      with:
+        report_paths: "**/target/surefire-reports/*.xml"
+        check-name: "JUnit Results"
+        detailed_summary: true

@@ -1,0 +1,20 @@
+services:
+  api:
+    container_name: demo-api-devops
+    image: demo-api-devops:latest
+    ports:
+      - 8002:8080
+    build:
+      context: .
+      target: develop
+    volumes:
+      - .:/app
+
+  api-production:
+    container_name: demo-api-devops-prod
+    image: demo-api-devops-prod:latest
+    ports:
+      - 8002:8080
+    build:
+      context: .
+      target: production
