@@ -1,7 +1,7 @@
 services:
   api:
-    container_name: labdevops-front
-    image: labdevops-front:latest
+    container_name: labdevops-back
+    image: labdevops-back:latest
     ports:
       - 8002:8080
     build:
@@ -11,8 +11,8 @@ services:
       - .:/app
 
   api-production:
-    container_name: labdevops-front-prod
-    image: docker.io/polirritmico/labdevops-front:latest
+    container_name: labdevops-back
+    image: docker.io/polirritmico/labdevops-back:latest
     ports:
       - 8002:8080
     build:
