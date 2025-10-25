@@ -12,18 +12,20 @@ RUN apt-get update \
 WORKDIR /app
 USER $USER:$USER
 ENV PATH="/home/$USER/.local/bin:$PATH"
-COPY --chown=$USER:$USER requirements*.txt .
-RUN pip install --no-cache-dir --upgrade --user -r requirements.txt
+RUN pip install --no-cache-dir uv
+COPY --chown=$USER:$USER pyproject.toml uv.lock ./
 
 
 FROM base AS develop
-RUN pip install --no-cache-dir --user -r requirements-dev.txt
+RUN uv sync --frozen --dev
 EXPOSE 8080
 CMD ["fastapi", "dev", "src/main.py", "--host", "0.0.0.0", "--port", "8080"]
 
 
 FROM base AS production
-ENV PYTHONDONTWRITEBYTECODE=true
-ENV PYTHONUNBUFFERED=true
+ENV PYTHONDONTWRITEBYTECODE=true \
+    PYTHONUNBUFFERED=true
+RUN uv sync --frozen
+COPY --chown=$USER:$USER . .
 EXPOSE 8080
 CMD ["fastapi", "run", "--host", "0.0.0.0", "--port", "8080"]
