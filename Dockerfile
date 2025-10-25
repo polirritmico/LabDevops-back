@@ -19,7 +19,7 @@ COPY --chown=$USER:$USER pyproject.toml uv.lock ./
 FROM base AS develop
 RUN uv sync --frozen --dev
 EXPOSE 8080
-CMD ["fastapi", "dev", "src/main.py", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uv", "run", "fastapi", "dev", "src/main.py", "--host", "0.0.0.0", "--port", "8080"]
 
 
 FROM base AS production
@@ -28,4 +28,4 @@ ENV PYTHONDONTWRITEBYTECODE=true \
 RUN uv sync --frozen
 COPY --chown=$USER:$USER . .
 EXPOSE 8080
-CMD ["fastapi", "run", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uv", "run", "fastapi", "run", "--host", "0.0.0.0", "--port", "8080"]
