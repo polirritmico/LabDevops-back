@@ -1,7 +1,7 @@
 services:
   api:
-    container_name: demo-api-devops
-    image: demo-api-devops:latest
+    container_name: labdevops-front
+    image: labdevops-front:latest
     ports:
       - 8002:8080
     build:
@@ -11,10 +11,9 @@ services:
       - .:/app
 
   api-production:
-    container_name: demo-api-devops-prod
-    image: demo-api-devops-prod:latest
+    container_name: labdevops-front-prod
+    image: docker.io/polirritmico/labdevops-front:latest
     ports:
       - 8002:8080
     build:
-      context: .
       target: production
