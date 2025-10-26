@@ -87,7 +87,7 @@ package = false
 line-length = 88
 
 [tool.sonar]
-projectKey = "polirritmico:polirritmico_LabDevops-back"
+projectKey = "polirritmico_LabDevops-back"
 organization = "polirritmico"
 projectName = "LabDevops Back"
 sources = "."
