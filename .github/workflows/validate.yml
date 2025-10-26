@@ -122,8 +122,10 @@ jobs:
         run: uv sync --frozen --group sonar
 
       - name: Run SonarCloud Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           uv run pysonar \
             -Dsonar.branch.name=${{ github.ref_name }} \
-            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.token="${SONAR_TOKEN}" \
             -Dsonar.python.coverage.reportPaths=coverage.xml
