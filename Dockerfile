@@ -6,8 +6,8 @@ ARG USER=devops
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
-    && useradd -m $USER \
-    && install -d -o $USER -g $USER /app \
+    && useradd -m "$USER" \
+    && install -d -o "$USER" -g "$USER" /app \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 USER $USER:$USER
