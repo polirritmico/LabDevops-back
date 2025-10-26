@@ -28,4 +28,4 @@ ENV PYTHONDONTWRITEBYTECODE=true \
 RUN uv sync --frozen
 COPY --chown=$USER:$USER . .
 EXPOSE 8080
-CMD ["uv", "run", "fastapi", "run", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uv", "run", "fastapi", "run", "--host", "0.0.0.0", "--port", "8080", "src/main.py"]
