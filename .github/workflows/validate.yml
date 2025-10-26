@@ -119,11 +119,11 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install dependencies
-        run: uv sync --frozen --group sonarqube
+        run: uv sync --frozen --group sonar
 
       - name: Run SonarCloud Analysis
         run: |
-          pysonar \
+          uv run pysonar \
             -Dsonar.branch.name=${{ github.ref_name }} \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.python.coverage.reportPaths=coverage.xml
