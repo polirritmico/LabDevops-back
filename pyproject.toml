@@ -85,3 +85,11 @@ package = false
 
 [tool.black]
 line-length = 88
+
+[tool.sonar]
+projectKey = "polirritmico:polirritmico_LabDevops-back"
+organization = "polirritmico"
+projectName = "LabDevops Back"
+sources = "."
+projectVersion = "0.1"
+sourceEncoding = "UTF-8"
