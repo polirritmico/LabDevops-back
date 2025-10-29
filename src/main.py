@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -8,7 +10,8 @@ app = FastAPI()
 
 @app.get("/")
 async def read_root() -> dict[str, str]:
-    return {"data": "La API funciona correctamente y devuelve este mensaje."}
+    current_time = datetime.utcnow().strftime("%H:%M:%S")
+    return {"data": f"La API funciona correctamente: {current_time} UTC."}
 
 
 @app.get("/items/{id}")

@@ -11,13 +11,13 @@ client = TestClient(app)
 def test_root_endpoint():
     case = "/"
     expected_key = "data"
-    expected_value = "La API funciona correctamente y devuelve este mensaje."
+    expected_value = "La API funciona correctamente"
 
     response = client.get(case)
     assert response.status_code == 200
     output = response.json()
 
-    assert expected_value == output.get(expected_key)
+    assert expected_value in output.get(expected_key)
 
 
 def test_read_items():
