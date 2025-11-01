@@ -130,6 +130,9 @@ jobs:
       - name: Snyk Setup
         uses: snyk/actions/setup@master
 
+      - name: Install dependencies for Snyk (uv workaround)
+        run: pip install -r requirements.txt
+
       - name: Run Snyk (pip fallback)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
