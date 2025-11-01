@@ -114,19 +114,55 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Run Snyk to check for vulnerabilities
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install all dependencies and generate requirements.txt
+        run: |
+          uv sync --frozen --all-groups
+          uv export --format=requirements.txt
+
+      - name: Run Snyk (pip fallback)
         uses: snyk/actions/python-3.12@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --sarif-file-output=snyk.sarif
+          args: --file=requirements.txt --sarif-file-output=snyk.sarif --json-file-output=snyk.json
           json: true
 
-      - name: Upload result to Github Code Scanning
+      - name: Upload Snyk SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
+        if: always()
         with:
           sarif_file: snyk.sarif
+
+      - name: Upload Snyk JSON report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-json-report
+          path: snyk.json
+          if-no-files-found: ignore
+
+      - name: Display JSON summary
+        if: always()
+        run: |
+          TOTAL=$(jq '.vulnerabilities | length' snyk.json 2>/dev/null || echo 0)
+          {
+            echo "### Snyk Vulnerabilities Summary"
+            echo ""
+            echo "- **Total:** $TOTAL"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for level in critical high medium low; do
+            COUNT=$(jq "[.vulnerabilities[] | select(.severity==\"$level\") ] | length" snyk.json 2>/dev/null || echo 0)
+            echo "- **${level^}:** $COUNT" >> "$GITHUB_STEP_SUMMARY"
+          done
 
   sonar-analysis:
     name: "5. SonarQube Static Analysis"
