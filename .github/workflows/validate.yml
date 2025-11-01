@@ -81,12 +81,14 @@ jobs:
         run: uv sync --frozen --group tests
 
       - name: Run pytest with coverage
+        env:
+          COVERAGE_THRESHOLD: ${{ vars.COVERAGE_THRESHOLD }}
         run: |
           uv run pytest \
             --cov=. \
             --cov-report=xml \
             --junitxml=report.xml \
-            --cov-fail-under=70
+            --cov-fail-under=${COVERAGE_THRESHOLD}
 
       - name: Upload coverage report artifact
         if: always()
