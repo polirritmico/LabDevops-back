@@ -133,13 +133,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: |
-            --file=requirements.txt
-            --sarif-file-output=snyk.sarif
-            --json-file-output=snyk.json
-            --severity-threshold=low
-            --fail-on=high
-            --no-root
+          args: --file=requirements.txt --sarif-file-output=snyk.sarif --json-file-output=snyk.json --severity-threshold=low --fail-on=high --no-root
           json: true
 
       - name: Upload Snyk SARIF to GitHub Code Scanning
