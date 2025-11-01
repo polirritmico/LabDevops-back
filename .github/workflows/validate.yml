@@ -209,4 +209,4 @@ jobs:
           uv run pysonar \
             -Dsonar.branch.name=${{ github.ref_name }} \
             -Dsonar.token="${SONAR_TOKEN}" \
-            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.python.coverage.reportPaths=coverage.xml || exit $?
