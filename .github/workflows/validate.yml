@@ -124,7 +124,7 @@ jobs:
 
       - name: Install all dependencies and generate requirements.txt
         run: |
-          uv sync --frozen --all-groups
+          uv sync --frozen
           uv export --format=requirements.txt > requirements.txt
 
       - name: Run Snyk (pip fallback)
@@ -133,7 +133,11 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --file=requirements.txt --sarif-file-output=snyk.sarif --json-file-output=snyk.json --no-root
+          args: |
+            --file=requirements.txt
+            --sarif-file-output=snyk.sarif
+            --json-file-output=snyk.json
+            --no-root
           json: true
 
       - name: Upload Snyk SARIF to GitHub Code Scanning
