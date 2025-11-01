@@ -138,6 +138,8 @@ jobs:
             --file=requirements.txt \
             --sarif-file-output=snyk.sarif \
             --json-file-output=snyk.json \
+            --severity-threshold=high \
+            --fail-on=upgradable \
             --no-root
 
       - name: Upload Snyk SARIF to GitHub Code Scanning
