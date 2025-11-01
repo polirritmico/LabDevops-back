@@ -137,6 +137,8 @@ jobs:
             --file=requirements.txt
             --sarif-file-output=snyk.sarif
             --json-file-output=snyk.json
+            --severity-threshold=low
+            --fail-on=high
             --no-root
           json: true
 
@@ -167,6 +169,12 @@ jobs:
             COUNT=$(jq "[.vulnerabilities[] | select(.severity==\"$level\") ] | length" snyk.json 2>/dev/null || echo 0)
             echo "- **${level^}:** $COUNT" >> "$GITHUB_STEP_SUMMARY"
           done
+
+          FAIL_COUNT=$(jq '[.vulnerabilities[] | select(.severity=="high" or .severity=="critical")] | length' snyk.json 2>/dev/null || echo 0)
+          if [ "$FAIL_COUNT" -gt 0 ]; then
+            echo "High/Critical vulnerabilities detected!"
+            exit 1
+          fi
 
   sonar-analysis:
     name: "5. SonarQube Static Analysis"

@@ -60,17 +60,25 @@ jobs:
           snyk container test ${{ env.IMAGE_NAME }}:${{ github.sha }} \
             --file=Backend/Dockerfile \
             --severity-threshold=low \
+            --fail-on=high \
             --json-file-output=snyk-container-report.json
 
       - name: Snyk Container Summary
         if: always()
         run: |
           echo "### 🐳 Snyk Container Scan Summary" >> "$GITHUB_STEP_SUMMARY"
+
           TOTAL=$(jq '.vulnerabilities | length' snyk-container-report.json 2>/dev/null || echo 0)
           for level in critical high medium low; do
             COUNT=$(jq "[.vulnerabilities[] | select(.severity==\"$level\") ] | length" snyk-container-report.json 2>/dev/null || echo 0)
             echo "- **${level^}:** $COUNT" >> "$GITHUB_STEP_SUMMARY"
           done
+
+          FAIL_COUNT=$(jq '[.vulnerabilities[] | select(.severity=="high" or .severity=="critical")] | length' snyk-container-report.json 2>/dev/null || echo 0)
+          if [ "$FAIL_COUNT" -gt 0 ]; then
+            echo "High/Critical vulnerabilities detected in container scan!"
+            exit 1
+          fi
 
       - name: Upload Snyk Container JSON Report
         if: always()
