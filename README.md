@@ -2,11 +2,24 @@
 
 This is the backend of the full project.
 
-The front could be found here: https://github.com/polirritmico/LabDevops-front.
+## Links and References
 
-The back and front DockerHub images could be found here:
-https://hub.docker.com/repository/docker/polirritmico/labdevops-back
-https://hub.docker.com/repository/docker/polirritmico/labdevops-front
+- The front could be found here in the
+  [LabDevops-front](https://github.com/polirritmico/LabDevops-front) repository.
+
+- The DockerHub images could be found in the
+  [backend](https://hub.docker.com/repository/docker/polirritmico/labdevops-back)
+  and
+  [frontend](https://hub.docker.com/repository/docker/polirritmico/labdevops-front)
+  repositories.
+
+## Usage
+
+Since by itself the backend doesn't do much, the project execution instructions
+are in the Frontend repository
+[README](https://github.com/polirritmico/LabDevops-front/blob/main/README.md). A
+`docker-compose.yml` is provided that uses the built backend and frontend Docker
+images directly from Docker Hub.
 
 ## Setup
 
@@ -32,14 +45,6 @@ COVERAGE_THRESHOLD   70
 DOCKERHUB_IMAGE      labdevops-back
 DOCKERHUB_USERNAME   polirritmico
 ```
-
-## Local Usage
-
-Since by itself the backend doesn't do much, the project execution instructions
-are in the Frontend repository
-[README](https://github.com/polirritmico/LabDevops-front/blob/main/README.md). A
-`docker-compose.yml` is provided that uses the built backend and frontend Docker
-images directly from Docker Hub.
 
 ---
 
