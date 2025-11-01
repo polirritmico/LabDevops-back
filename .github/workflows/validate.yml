@@ -127,14 +127,18 @@ jobs:
           uv sync --frozen
           uv export --format=requirements.txt > requirements.txt
 
+      - name: Snyk Setup
+        uses: snyk/actions/setup@master
+
       - name: Run Snyk (pip fallback)
-        uses: snyk/actions/python-3.12@master
-        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --file=requirements.txt --sarif-file-output=snyk.sarif --json-file-output=snyk.json --severity-threshold=low --fail-on=high --no-root
-          json: true
+        run: |
+          snyk test \
+            --file=requirements.txt \
+            --sarif-file-output=snyk.sarif \
+            --json-file-output=snyk.json \
+            --no-root
 
       - name: Upload Snyk SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
