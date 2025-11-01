@@ -1,8 +1,8 @@
-name: "EV2 | 2. Deployment"
+name: "2. Deployment"
 
 on:
   workflow_run:
-    workflows: ["EV2 | 1. Validations"]
+    workflows: ["1. Validations"]
     types: [completed]
 
 permissions:
@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build-push:
     name: Build and Push Docker Image
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: docker.io/${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}
