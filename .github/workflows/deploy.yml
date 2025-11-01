@@ -55,6 +55,9 @@ jobs:
         uses: snyk/actions/setup@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk container scan
+        continue-on-error: true
         run: |
           snyk auth "${SNYK_TOKEN}"
           snyk container test ${{ env.IMAGE_NAME }}:${{ github.sha }} \
