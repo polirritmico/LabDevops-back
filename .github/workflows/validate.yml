@@ -11,6 +11,7 @@ permissions:
   packages: write
   id-token: write
   pages: write
+  security-events: write
 
 concurrency:
   group: release-${{ github.event.workflow_run.head_sha }}
@@ -120,6 +121,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --sarif-file-output=snyk.sarif
+          json: true
 
       - name: Upload result to Github Code Scanning
         uses: github/codeql-action/upload-sarif@v3
